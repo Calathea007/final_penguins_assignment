@@ -1,0 +1,71 @@
+---
+title: "bad_plot"
+author: ""
+date: "2022-12-05"
+output: html_document
+---
+# 2. A Figure Can Badly Communicate Data 
+
+## First, set your working directory
+
+```{r}
+#Set your working directory and check it is correct using getwd()
+setwd()
+getwd()
+```
+
+## Install and download the penguin data set and appropriate packages 
+
+```{r, message = FALSE}
+source("functions/library.R")
+```
+
+### First, assess the penguins data to see if it requires cleaning
+
+```{r}
+head(penguins_raw)
+```
+
+### So, this data set has column names with spaces and capitals. So, we must clean it to remove these so that we can specify the columns we want in the figure easily.
+
+### But, first we must save the raw, un-edited data
+```{r}
+write.csv(penguins_raw, paste0("data_raw/penguins_raw.csv"))
+```
+
+## Now, cleaning the dataset:
+
+### I have made various cleaning functions and saved them separately in an R script file called cleaning so I must source it in to apply it to the data.
+```{r}
+source("functions/cleaning.R")
+```
+
+### Now to use the sourced cleaning function to make a clean dataset called penguins_clean. Check afterwards that it is clean using the names() and head() functions.
+
+```{r}
+penguins_clean <- cleaning(penguins_raw)
+names(penguins_clean)
+write.csv(penguins_clean, paste0("data_clean/penguins_clean.csv"))
+head(penguins_clean)
+```
+
+### As I am making a boxplot of body mass by species I am going to make another dataset called no_na_body_mass where na values of body mass have been removed. This na removal cleaning function is also found in the cleaning.R file we sourced in.   
+
+## Removing NA values:
+
+```{r}
+no_na_body_mass <- remove_empty_body_mass(penguins_clean)
+write.csv(no_na_body_mass, paste0("data_clean/no_na_body_mass.csv"))
+no_na_body_mass
+```
+
+### Now to make a boxplot that badly communicates this data. 
+
+##Making a bad plot:
+
+```{r, echo = FALSE}
+source("functions/plotting.R")
+badplot_species_mass <- badplotting_mass(no_na_body_mass)
+badplot_species_mass
+```
+
